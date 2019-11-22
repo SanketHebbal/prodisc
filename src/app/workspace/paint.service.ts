@@ -36,8 +36,8 @@ export class PaintService {
   initialize(mountPoint: HTMLElement , key) {
     this.canvas = mountPoint.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
-    this.canvas.width = 750;
-    this.canvas.height = 450;
+    // this.canvas.width = 750;
+    // this.canvas.height = 450;
     this.ctx.lineJoin = 'round';
     this.ctx.lineCap = 'round';
     this.ctx.lineWidth = 5;
