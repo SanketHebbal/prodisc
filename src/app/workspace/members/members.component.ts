@@ -18,7 +18,7 @@ export class MembersComponent implements OnInit {
   requestedProject : any
   memberList = []
   memberInfo = null
-  selectedMembers=[];
+  selectedMembers = [];
 
   constructor(private db: AngularFireDatabase , 
               private data : DataService , 
@@ -30,7 +30,8 @@ export class MembersComponent implements OnInit {
     })
    }
 
-  ngOnInit() { 
+  ngOnInit() {
+    this.selectedMembers = [];
   }
 
   getMemberList()
@@ -47,7 +48,7 @@ export class MembersComponent implements OnInit {
   }
 
   SearchMembers(frm) {
-    this.selectedMembers = [];
+
     let keys = frm.value.skills;
     let  user = []
     this.db.list("Users").snapshotChanges().
@@ -130,6 +131,7 @@ export class MembersComponent implements OnInit {
       name : this.requestedProject['name'] , 
       description : this.requestedProject['description']
     })
+    this.Reset()
   }
 
   Details(key)
@@ -140,6 +142,11 @@ export class MembersComponent implements OnInit {
     })
   }
   onChange(event) {
+  }
+
+  Reset()
+  {
+    this.selectedMembers = []
   }
 }
  

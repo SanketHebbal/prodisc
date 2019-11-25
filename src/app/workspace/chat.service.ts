@@ -47,12 +47,10 @@ export class ChatService {
   }
 
   getTimeStamp() {
-    const now = new Date();
+    let now = new Date;
  
-    const time = now.getUTCHours() + ':' +
-                 now.getUTCMinutes() + ':' +
-                 now.getUTCSeconds();
-
+    const time = now.getHours() + ':' +
+                 now.getMinutes()
     return (time);
   }
 

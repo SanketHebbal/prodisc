@@ -13,7 +13,6 @@ export class AuthService {
   
   private eventAuthError = new BehaviorSubject<string>("");
   eventAuthError$ = this.eventAuthError.asObservable();
-  url : any;
   newUser: any;
 
   constructor(
@@ -38,27 +37,25 @@ export class AuthService {
       })
   }
 
-  onSelectFile(event) { // called each time file input changes
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
+  // onSelectFile(event) { // called each time file input changes
+  //   if (event.target.files && event.target.files[0]) {
+  //     var reader = new FileReader();
 
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+  //     reader.readAsDataURL(event.target.files[0]); // read file as data url
 
-      reader.onload = (event) => { // called once readAsDataURL is completed
-        this.url = event.target['result']
-      }
-    }
-  }
+  //     reader.onload = (event) => { // called once readAsDataURL is completed
+  //       this.url = event.target['result']
+  //     }
+  //   }
+  // }
 
   createUser(user) {
-    // console.log(user);
     this.afAuth.auth.createUserWithEmailAndPassword( user.email, user.password)
       .then( userCredential => {
         this.newUser = user;
-        // console.log(userCredential);
         userCredential.user.updateProfile( {
-          displayName: user.firstName + ' ' + user.lastName ,
-          photoURL : this.url
+          displayName: user.firstName ,
+          // photoURL : this.url
         });
 
         this.insertUserData(userCredential)
@@ -79,11 +76,11 @@ export class AuthService {
       lastname: this.newUser.lastName,
       bio: this.newUser.bio,
       skills:this.newUser.skills 
-      //profilePic : this.url
     })
   }
 
   logout() {
+    this.router.navigate(['']);
     return this.afAuth.auth.signOut();
   }
 }

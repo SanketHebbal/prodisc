@@ -17,6 +17,10 @@ export class PaintService {
   coordinates : any
   base : any;
 
+  shape : any;
+  color : any;
+  size : any;
+
   projectKey : any
   public canvas: HTMLCanvasElement = null
   public ctx: CanvasRenderingContext2D
@@ -30,14 +34,16 @@ export class PaintService {
 
   constructor(private db: AngularFireDatabase ,  private router: Router )
     {
-
+      this.color = 'black'
+      this.shape = 'point'
+      this.size = 5
     }
 
   initialize(mountPoint: HTMLElement , key) {
     this.canvas = mountPoint.querySelector('canvas')
     this.ctx = this.canvas.getContext('2d')
-    // this.canvas.width = 750;
-    // this.canvas.height = 450;
+    this.canvas.width = 750;
+    this.canvas.height = 450;
     this.ctx.lineJoin = 'round';
     this.ctx.lineCap = 'round';
     this.ctx.lineWidth = 5;
@@ -46,12 +52,15 @@ export class PaintService {
     //console.log(this.projectKey)
 
     this.CreateReference()
-    this.SetToDefault()
+    this.base.child(`status`).set({
+      status : 0
+    });
+    //this.SetToDefault()
     
     this.base.child(`attributes`).set({
-      color : 'black' ,
-      size : 5 ,
-      shape : 'point'
+      color : this.color ,
+      size : this.size ,
+      shape : this.shape
     });
     //console.log('done from paint service')
   }
@@ -61,7 +70,8 @@ export class PaintService {
    this.base = this.db.database.ref('projects').child(this.projectKey).child('sketch');
     const coordinatesRef = this.base.child(`coordinates`);    
     coordinatesRef.on('value', s => {this.coordinates = s.val()
-      this.draw();
+      if(this.attributes)
+        this.draw();
     });
   
     const shapeRef = this.base.child(`attributes`);    
@@ -71,12 +81,14 @@ export class PaintService {
 
     const freehandRef = this.base.child(`freehand`);    
     freehandRef.on('value', s => {this.freehand = s.val()
-      this.draw();
+      if(this.attributes)
+        this.draw();
     });
 
     const statusRef = this.base.child(`status`);    
     statusRef.on('value', s => {this.status = s.val()
-      this.draw();
+      if(this.attributes)
+        this.draw();
     });
 
     const snapshotRef = this.base.child(`snapshot`);    
@@ -88,7 +100,6 @@ export class PaintService {
 
   SetToDefault()
   { 
-
     this.base.child(`coordinates`).set({
       x1: 0 , 
       y1: 0 , 
@@ -103,10 +114,6 @@ export class PaintService {
       y2 : 0 
     });
 
-    this.base.child(`status`).set({
-      status : 0
-    });
-    
     // this.base.child(`snapshot`).set({
     //   image : null
     // });
@@ -182,12 +189,12 @@ export class PaintService {
       this.SetCoordinates(this.sx , this.sy , clientX , clientY);
     }
 
-    if (this.attributes['shape'] == 'freehand')
+    if (this.attributes['shape'] == 'freehand' || this.attributes['shape'] == 'eraser')
       this.FreeHand(clientX , clientY)
   }
 
   draw()
-  {    
+  {  
     this.ctx.beginPath();
     this.ctx.strokeStyle = this.attributes['color'];
     this.ctx.lineWidth = this.attributes['size'];
@@ -196,7 +203,7 @@ export class PaintService {
     if (this.attributes['shape'] == 'point')
     { 
       if (this.status['status'] == 1)
-        this.ctx.arc(this.coordinates['x1'], this.coordinates['y1'], 1 , 0, Math.PI * 2, true);
+        this.ctx.arc(this.coordinates['x1'], this.coordinates['y1'], 0.5 , 0, Math.PI * 2, true);
     }
 
     // Line
@@ -225,7 +232,44 @@ export class PaintService {
         var midX = (x1 + x2) / 2
         var midY = (y1 + y2) / 2
 
-        this.ctx.arc(x1 , y1 , radius , 0, Math.PI * 2 , true);
+        this.ctx.arc(midX , midY , radius , 0, Math.PI * 2 , true);
+      }
+    }
+
+
+    //Semi-Circle - up
+    else if (this.attributes['shape'] == 'semicircleUp')
+    { 
+      if (this.status['status'] == 1)
+      {
+        var x1 = this.coordinates['x1']
+        var x2 = this.coordinates['x2']
+        var y1 = this.coordinates['y1']
+        var y2 = this.coordinates['y2']
+
+        var radius  = (Math.sqrt(Math.pow((x2 - x1) , 2)  + Math.pow((y2 - y1) , 2))) / 2
+        var midX = (x1 + x2) / 2
+        var midY = (y1 + y2) / 2
+
+        this.ctx.arc(midX , midY , radius , 0, Math.PI , true);
+      }
+    }
+
+    //Semi-Circle - down
+    else if (this.attributes['shape'] == 'semicircleDown')
+    { 
+      if (this.status['status'] == 1)
+      {
+        var x1 = this.coordinates['x1']
+        var x2 = this.coordinates['x2']
+        var y1 = this.coordinates['y1']
+        var y2 = this.coordinates['y2']
+
+        var radius  = (Math.sqrt(Math.pow((x2 - x1) , 2)  + Math.pow((y2 - y1) , 2))) / 2
+        var midX = (x1 + x2) / 2
+        var midY = (y1 + y2) / 2
+
+        this.ctx.arc(midX , midY , radius , 0, Math.PI , false);
       }
     }
 
@@ -253,6 +297,19 @@ export class PaintService {
       {
         this.ctx.moveTo(this.freehand['x1'] , this.freehand['y1']);
         this.ctx.lineTo(this.freehand['x2'], this.freehand['y2']);
+      }
+    }
+
+    //Eraser
+    else if (this.attributes['shape'] == 'eraser')
+    { 
+      console.log("called me i am eraser")
+      if (this.status['status'] == 1)
+      {
+        var x1 = this.freehand['x1']
+        var y1 = this.freehand['y1']
+
+        this.ctx.clearRect(x1 , y1 , this.attributes['size'] , this.attributes['size']);
       }
     }
 
@@ -324,58 +381,33 @@ export class PaintService {
       return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
   }
 
-  selectColor(keycode: number)
-  {    
-    var color : string = this.attributes['color'];
-    var shape : string = this.attributes['shape'];
-    var size : number = this.attributes['size'];
+  selectedShape(shape)
+  {
+    this.shape = shape;
+    this.Attributes(this.color , this.size , this.shape);
+    console.log(this.attributes)
+  }
 
-    //console.log(keycode)
+  selectedColor(color)
+  {
+    this.color = color;
+    this.Attributes(this.color , this.size , this.shape);
+  }
+
+  selectedSize(keycode: number)
+  {    
     switch(keycode)
     {  
-      case 82:
-      case 114 :    color =  `red`;          // R
-                    break;
-      case 79:
-      case 111 :    color =  `orange`;       // O
-                    break;
-      case 66:
-      case 98  :    color =  `blue`;         // B
-                    break;
-      case 80:
-      case 112 :    color =  `pink`;         // P
-                    break;
-      case 71:
-      case 121 :    color =  `yellow`;       // Y
-                    break;
-      case 71:
-      case 103 :    color =  `green`;        // G
-                    break;
-      
-      case 43  :    if ( size < 20 )
-                        size += 2;
+
+      case 43  :    if ( this.size < 20 )
+                        this.size += 2;
                      break;
 
-      case 45  :    if ( size > 5 )
-                        size -= 2;
+      case 45  :    if ( this.size > 5 )
+                        this.size -= 2;
                       break;
-      case 76:
-      case 108 :    shape = 'line';         // L
-                      break;
-      case 80:
-      case 113 :    shape = 'point';        // P
-                      break;
-      case 67:
-      case 99 :     shape = 'circle';       // C
-                      break;
-      case 70:
-      case 102 :    shape = 'freehand'      //  F
-                      break;
-      
-      case 84:
-      case 116 :    shape = 'rectangle'     // T
-                      break;
+
     }
-    this.Attributes(color , size , shape);
+    this.Attributes(this.color , this.size , this.shape);
   }
 }

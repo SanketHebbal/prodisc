@@ -68,6 +68,7 @@ export class PaintComponent implements OnInit {
 
   Upload(image)
   { 
+    this.paintSvc.clear();
     this.paintSvc.restore(image);
   }
 
@@ -82,7 +83,15 @@ export class PaintComponent implements OnInit {
     this.paintSvc.eraser();
   }
 
+  SelectShape(shape)
+  { 
+    this.paintSvc.selectedShape(shape)
+  }
 
+  SelectColor(color)
+  {
+    this.paintSvc.selectedColor(color)
+  }
   private startPainting() {
 
     const { nativeElement } = this.elRef;
@@ -144,7 +153,7 @@ export class PaintComponent implements OnInit {
       });
 
       keyboard$.subscribe((event) => {
-        this.paintSvc.selectColor(event.keyCode);
+        this.paintSvc.selectedSize(event.keyCode);
       });
 
     

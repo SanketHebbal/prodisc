@@ -29,12 +29,6 @@ export class NavbarComponent implements OnInit {
       .subscribe( user => {
         this.user = user
       })
-
-    //   this.db.database.ref(`Users/${this.afAuth.auth.currentUser.uid}/profilePic`).on("value" , snap => {
-    //   this.url = snap.val()
-    //   console.log("My Profile Pic")
-    //   console.log(snap.val())
-    // })
   }
 
   createOnline$() {

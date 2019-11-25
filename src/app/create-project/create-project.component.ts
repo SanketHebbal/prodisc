@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AprojectService } from './aproject.service';
-import { FormControl, FormGroup } from "@angular/forms";
-import { FormBuilder } from '@angular/forms';
 import { Router , ActivatedRoute } from '@angular/router';
+import { FormControl , FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-project',
@@ -14,22 +13,22 @@ export class CreateProjectComponent implements OnInit {
   submitted: boolean;
   showSuccessMessage: boolean;
   message : any;
-  form ;
+  projectForm ;
 
   constructor(private aprojectService: AprojectService , 
               private router: Router ,
               private route : ActivatedRoute,
               private formBuilder: FormBuilder){
-              this.form = this.formBuilder.group({
-                $key : null,
-                name: '',
-                description: '' ,
-                language : '',
-                platform: '',
-              });
   }
 
    ngOnInit() {
+    this.projectForm = this.formBuilder.group({
+      $key : null , 
+      name : ['', Validators.required],
+      description : ['', Validators.required],
+      language : ['', Validators.required],
+      platform : ['', [Validators.required]],
+    })
   }
 
   onSubmit() 
@@ -37,18 +36,25 @@ export class CreateProjectComponent implements OnInit {
     this.submitted = true;
     let key : string;
   
-    if (this.form.valid) 
+    if (this.projectForm.valid) 
     {
-      if (this.form.get('$key').value == null)
+      if (this.projectForm.get('$key').value == null)
       { 
-        key = this.aprojectService.insertcproject(this.form.value);
+        key = this.aprojectService.insertcproject(this.projectForm.value);
         this.router.navigate(['workspace'] , { queryParams:{ id : key}} )
       }
       
       this.showSuccessMessage = true;
       setTimeout(() => this.showSuccessMessage = false, 3000);
       this.submitted = false;
-      this.form.reset();
+      this.projectForm.reset();
     }
   }
+
+  reset() 
+  {
+    this.submitted = false;
+    this.projectForm.reset();
+  }
+  get f() { return this.projectForm.controls; }
 }

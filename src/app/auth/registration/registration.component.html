@@ -87,51 +87,76 @@
               <div class="text-center text-muted mb-4">
                 <small>Sign up with credentials</small>
               </div>
-              <form role="form" #userRegForm="ngForm" (ngSubmit)="createUser(userRegForm)">
-                <div class="form-group">
-                  <div class="input-group input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                    </div>
-                    <input ngModel #firstname="ngModel" name="firstName" class="form-control" placeholder="FirstName" type="text">
-                  </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group input-group-alternative mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                        </div>
-                        <input ngModel #lastname="ngModel" name="lastName" class="form-control" placeholder="LastName" type="text">
-                    </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-                    </div>
-                    <input ngModel #email="ngModel" name="email" class="form-control" placeholder="Email" type="email">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group input-group-alternative">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                    </div>
-                    <input ngModel #password="ngModel" name="password" class="form-control" placeholder="Password" type="password">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group input-group-alternative">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                    </div>
-                    <input ngModel #confirm="ngModel" name="confirm" class="form-control" placeholder="Confirm Password" type="password">
-                  </div>
-                </div>
 
-                <div class="form-group">
+              <form [formGroup]="registrationForm" (ngSubmit)="createUser(registrationForm)">
+                
+                  <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="text" formControlName="firstName" class="form-control" placeholder="First Name" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.firstName.errors.required">Firstname is required</div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+                        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.lastName.errors.required">Lastname is required</div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="text" formControlName="email" class="form-control" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Email is required</div>
+                            <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="password" formControlName="password" class="form-control" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required">Password is required</div>
+                            <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="input-group input-group-alternative mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                        </div>
+                        <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }">
+                        <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+                            <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
+                            <div *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</div>
+                        </div>
+                      </div>
+                  </div>
+
+                <!-- <div class="form-group">
                     <div class="input-group input-group-alternative">
-                        <select ngModel #skills="ngModel" name="skills" multiple (change)="onChange($event)">
+                        <select multiple formControlName="skills" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.skills.errors }">
+                            Your Skills
                             <option value="C">C</option>
                             <option value="C++"  >C++</option>
                             <option  value="Java" >Java</option>
@@ -141,38 +166,41 @@
                             <option  value="C#" >C#</option>
                             <option  value="Angular">Angular</option>
                             <option  value="Swift" >Swift</option>
-                            <option  value="Andriod" >Andriod</option> 
-                        </select>                    
-                    </div>
-                  </div>
-
-                  
-                <div class="form-group">
-                  <div class="input-group input-group-alternative">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                    </div>
-                    <input ngModel #bio="ngModel" name="bio" class="form-control" placeholder="Bio" type="text">
-                  </div>
-                </div>
-
-                <!-- <div class="form-group">
-                    <div class="input-group input-group-alternative">
-                      <input type='file' (change)="auth.onSelectFile($event)">                    
-                      <span class="avatar avatar-sm rounded-circle"  style="height: 50px ; width: 50px">
-                        <img [src]="auth.url" > <br/>
-                      </span>
+                            <option  value="Andriod" >Andriod</option>
+                        </select>                   
                     </div>
                 </div> -->
+
+                <div class="form-group">
+                    <div class="input-group input-group-alternative">
+                        <select multiple formControlName="skills" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.skills.errors }">
+                            <option *ngFor="let target of availableTargets; let i = index;" [value]="target .id" (click)="AddTarget(i)">{{target.name}}</option>
+                        </select>
+                        <textarea class="form-control" > {{ selectedTargets | json }}</textarea>               
+                    </div>
+                </div>
+   
+                <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      <input type="text" formControlName="bio" class="form-control" placeholder="Bio" [ngClass]="{ 'is-invalid': submitted && f.bio.errors }">
+                      <div *ngIf="submitted && f.bio.errors" class="invalid-feedback">
+                          <div *ngIf="f.bio.errors.required">Bio is required</div>
+                      </div>
+                    </div>
+                </div>
                 
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary mt-4">Create account</button>
                 </div>
-                <div class="text-center" *ngIf="showSuccessMessage">
+
+                <!-- <div class="text-center" *ngIf="showSuccessMessage">
                     <div class="alert alert-danger">
-                    {{ authError?.message }}
-                    </div>
-                </div>
+                      {{ authError?.message }}
+                  </div>
+                </div> -->
               </form>
             </div>
           </div>
