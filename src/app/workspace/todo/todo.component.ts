@@ -23,7 +23,7 @@ export class TodoComponent implements OnInit
   {
     this.submitted = true;
   
-    if (this.todoService.form.valid) 
+    if (this.todoService.form.valid)
     {
       if (this.todoService.form.get('$key').value == null)
       { 
@@ -39,7 +39,8 @@ export class TodoComponent implements OnInit
       this.submitted = false;
       this.todoService.form.reset();
       
-     
+      // reset the form
+      
       this.todoService.form.setValue({
         $key: null,
         Task: '' 

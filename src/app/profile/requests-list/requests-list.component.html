@@ -1,3 +1,5 @@
+<!-- Requested Project's List -->
+
 <div *ngIf = "requestedProject.length > 0">
         <table class="table align-items-center">
              <thead class="thead-light">
@@ -9,8 +11,7 @@
                 
                     <td scope="row" class="name">
                         <div class="media align-items-center">
-                            <div class="media-body">
-                                
+                            <div class="media-body"> 
                                 <a data-toggle="modal" data-target="#modal-default" (click)="Details(i)">
                                         {{request.name}}
                                 </a>
@@ -18,13 +19,15 @@
                         </div>
                     </td>
                     <td class="budget">
-                        <button type="button" class="btn btn-sm btn-primary" (click)="Accept(request.$key , i)">Accept</button>
-
+                        <button type="button" class="btn btn-sm btn-primary" (click)="Accept(request.$key , i)"><i class="ni ni-check-bold"></i></button>
+                        <button type="button" class="btn btn-sm btn-primary" (click)="Decline(request.$key , i)"><i class="ni ni-fat-remove"></i></button>
                     </td>
                 </tr>               
             </tbody>
         </table>
 </div>
+
+<!-- Model Show's Project Information -->
 
 <div class="row" *ngIf = "requestedProject.length > 0">
     <div class="col-md-4">

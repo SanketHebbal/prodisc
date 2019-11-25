@@ -1,3 +1,5 @@
+<!-- Model for Search Members for required skills -->
+
 <div class="row">
     <div class="col-md-4">
             <div class="modal fade" id="modal-searchMembers" tabindex="-1" role="dialog" aria-labelledby="modal-searchMembers" aria-hidden="true">
@@ -43,7 +45,7 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="list">
+                                    <tbody class="list" *ngIf="selectedMembers.length > 0; else elseContent">
                                         
                                         <tr *ngFor="let member of selectedMembers">
                                             <td scope="row" class="name">
@@ -57,9 +59,19 @@
                                                 <button type="button" class="btn btn-primary" (click)="sendRequest(member.$key)">Send Request</button>
                                             </td>
 
-                                        </tr>
-                                        
+                                        </tr>                                        
                                     </tbody>
+                                    <ng-template #elseContent>
+                                            <tr>
+                                                <td>
+                                                    <div class="media align-items-center">
+                                                        <div class="media-body">
+                                                            <span class="mb-0 text-sm">No Member Found</span>
+                                                        </div>
+                                                    </div>                                                                
+                                                </td>
+                                            </tr>
+                                    </ng-template>
                                 </table>
                             </div>                           
                             </div>                   
@@ -75,7 +87,9 @@
     </div>
 </div>
 
-    <div  style="overflow: auto;overflow-x: hidden;">
+<!-- Team Member's List -->
+
+<div  style="overflow: auto;overflow-x: hidden;">
         <table class="table table-responsive"> 
 
                 <tr *ngFor="let member of memberList">
@@ -92,12 +106,13 @@
                     </td>
                 </tr>                
         </table>
-    </div>
+</div>
 
- 
+<!-- Model -> Shows Information of an individual team member -->
+
 <div class="row" *ngIf = "memberInfo">
     <div class="col-md-4">
-        <div class="modal fade" id="modal-searchMembers" tabindex="-1" role="dialog" aria-labelledby="modal-searchMembers" aria-hidden="true">
+        <div class="modal fade" id="modal-memberInformation" tabindex="-1" role="dialog" aria-labelledby="modal-memberInformation" aria-hidden="true">
       <div class="modal-dialog modal-success modal- modal-dialog-centered modal-" role="document">
           <div class="modal-content">
               

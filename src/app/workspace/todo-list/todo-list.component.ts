@@ -14,6 +14,9 @@ export class TodoListComponent implements OnInit
   constructor(private todoService: TodoService) {
   }
   
+  // Keep eye on the wheather task's are added or not.
+  // If task is added then update the todo list in html.
+
   ngOnInit() 
   {
     this.todoService.getTodo().subscribe(
@@ -27,12 +30,19 @@ export class TodoListComponent implements OnInit
       });
   }
 
-  onChange(val:any , key : any) {
+  // Update the status accordingly.
+  //If status is completed which indicates completion of task then delete the task
+ 
+  onChange(val:any , key : any)  
+  {
     let status = val['srcElement']['value']
     this.todoService.setStatus(key , status )
     if(status == 'Completed')  
       this.onDelete(key)
   }
+
+  // $key is the key of task
+  // Ask for confirmation defore deleting the task.
 
   onDelete($key) 
   {
@@ -43,4 +53,4 @@ export class TodoListComponent implements OnInit
       setTimeout(() => this.showDeletedMessage = false, 3000);
     }
   } 
-}
+} 

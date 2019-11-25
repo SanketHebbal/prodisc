@@ -14,7 +14,7 @@ import { MustMatch } from './must-match.validator';
 export class RegistrationComponent implements OnInit {
 
   authError: any;
-  showSuccessMessage: boolean;
+  showSuccessMessage: boolean = false;
   url: string;
   registrationForm;
   submitted :boolean;
@@ -25,12 +25,10 @@ export class RegistrationComponent implements OnInit {
               private formBuilder: FormBuilder ) { }
 
   ngOnInit() {
-    // this.auth.eventAuthError$.subscribe( data => {
-    //   this.authError = data;
-    //   if(this.authError)
-    //     this.showSuccessMessage = true;
-    //   setTimeout(() => this.showSuccessMessage = false, 3000);
-    // })
+    this.auth.eventAuthError$.subscribe( data => {
+        alert(data)
+      })
+
     this.registrationForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -48,7 +46,7 @@ export class RegistrationComponent implements OnInit {
                        {id: 3, name: "C#"}, {id: 4, name: "Php"}, {id: 5, name: "Python" },
                        {id: 6, name: "Go"}, {id: 7, name: "Ruby"}, {id: 8, name: "Haskel" },
                        {id: 9, name: "Kotlin"}, {id: 10, name: "Html"}, {id: 11, name: "Angular" },
-                       {id: 12, name: "Data Structure"},
+                       {id: 12, name: "Data Structure"},{id: 13, name: "Swift"},{id: 14, name: "Andriod"} 
                     ];
   selectedTargets = [];
 
@@ -67,17 +65,13 @@ export class RegistrationComponent implements OnInit {
 
   createUser(frm) {
     frm.value.skills = this.selectedTargets
-    console.log(frm.value.skills)
     this.submitted = true;
-      //if (frm.value.password == frm.value.confirm)
-        this.auth.createUser(frm.value);
-        //this.router.navigate(['login']);
+    this.auth.createUser(frm.value);
   }
 
   onChange(event)
   {
     let skill = event['srcElement']['value']
-    console.log(event)
   }
 
   reset() 

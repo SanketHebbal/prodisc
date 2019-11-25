@@ -45,6 +45,11 @@ export class RequestsListComponent implements OnInit {
     this.db.database.ref(`Users/${this.afAuth.auth.currentUser.uid}/requests`).child(requestKey).remove();
   }
 
+  Decline(requestKey)
+  {
+    this.db.database.ref(`Users/${this.afAuth.auth.currentUser.uid}/requests`).child(requestKey).remove();
+  }
+
   Details(index)
   {
     this.db.database.ref(`projects`).child(this.requestedProject[index]['projectId']).on("value" , snap => {

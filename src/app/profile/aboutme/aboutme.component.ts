@@ -12,19 +12,21 @@ import { Router } from '@angular/router';
 })
 export class AboutmeComponent implements OnInit {
 
+  user : any;
   username : string;
   firstname : string;
   lastname : string;
   bio : string;
   email : string;
   skills : any = [];
-  user : any;
+
   edit : boolean = true;
+  
   availableTargets = [  {id: 0, name: "C"}, {id: 1, name: "C++"}, {id: 2, name: "Java" },
                         {id: 3, name: "C#"}, {id: 4, name: "Php"}, {id: 5, name: "Python" },
                         {id: 6, name: "Go"}, {id: 7, name: "Ruby"}, {id: 8, name: "Haskel" },
                         {id: 9, name: "Kotlin"}, {id: 10, name: "Html"}, {id: 11, name: "Angular" },
-                        {id: 12, name: "Data Structure"},
+                        {id: 12, name: "Data Structure"},{id: 13, name: "Swift"},{id: 14, name: "Andriod"}
                       ];
   form ;
   constructor(private db: AngularFireDatabase , 
@@ -58,14 +60,12 @@ export class AboutmeComponent implements OnInit {
   Update()
   { 
     this.edit = true;
-    this.db.database.ref(`Users/${this.afAuth.auth.currentUser.uid}`).set({
+    this.db.database.ref(`Users/${this.afAuth.auth.currentUser.uid}`).update({
       bio : this.bio ,
-      email : this.email ,
-      firstname : this.firstname ,
-      lastname : this.lastname ,
       skills : this.skills ,
-      username : this.username
-    })
+      firstname :  this.firstname , 
+      lastname : this.lastname
+  })
   }
 
   DeleteUser()

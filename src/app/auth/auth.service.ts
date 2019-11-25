@@ -37,30 +37,17 @@ export class AuthService {
       })
   }
 
-  // onSelectFile(event) { // called each time file input changes
-  //   if (event.target.files && event.target.files[0]) {
-  //     var reader = new FileReader();
-
-  //     reader.readAsDataURL(event.target.files[0]); // read file as data url
-
-  //     reader.onload = (event) => { // called once readAsDataURL is completed
-  //       this.url = event.target['result']
-  //     }
-  //   }
-  // }
-
   createUser(user) {
     this.afAuth.auth.createUserWithEmailAndPassword( user.email, user.password)
       .then( userCredential => {
         this.newUser = user;
         userCredential.user.updateProfile( {
           displayName: user.firstName ,
-          // photoURL : this.url
         });
 
         this.insertUserData(userCredential)
           .then(() => {
-            this.router.navigate(['login']);
+            this.router.navigate(['profile']);
           });
       })
       .catch( error => {

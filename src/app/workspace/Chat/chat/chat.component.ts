@@ -18,14 +18,14 @@ export class ChatComponent implements OnInit {
 
   send()
   {
-    this.chat.sendMessage(this.message);
-    console.log(this.message)
+    this.chat.sendMessage(this.message); // message is has been two way binded
     this.message = '';
   }
 
   handleSubmit(event){
     if (event.keyCode == 13){
       this.send();
+      this.message.slice(0)
     }
   }
 }

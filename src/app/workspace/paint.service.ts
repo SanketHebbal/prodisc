@@ -49,20 +49,15 @@ export class PaintService {
     this.ctx.lineWidth = 5;
 
     this.projectKey = key;
-    //console.log(this.projectKey)
-
     this.CreateReference()
     this.base.child(`status`).set({
       status : 0
     });
-    //this.SetToDefault()
-    
     this.base.child(`attributes`).set({
       color : this.color ,
       size : this.size ,
       shape : this.shape
     });
-    //console.log('done from paint service')
   }
 
   CreateReference()
@@ -76,7 +71,6 @@ export class PaintService {
   
     const shapeRef = this.base.child(`attributes`);    
     shapeRef.on('value', s => {this.attributes = s.val()
-      //console.log(this.attributes)
     });
 
     const freehandRef = this.base.child(`freehand`);    
@@ -94,8 +88,6 @@ export class PaintService {
     const snapshotRef = this.base.child(`snapshot`);    
     snapshotRef.on('value', s => {this.mysnaps = s.val()
     });
-
-//    this.restore()
   }
 
   SetToDefault()
@@ -113,20 +105,16 @@ export class PaintService {
       x2 : 0 ,
       y2 : 0 
     });
-
-    // this.base.child(`snapshot`).set({
-    //   image : null
-    // });
   }
 
-  Status( status : number)
+  Status( status : number) // status 0 -> dont draw status 1 -> draw
   {
     this.base.child(`status`).set({
       status : status
     });
   }
 
-  FreeHand(clientX : number , clientY : number)
+  FreeHand(clientX : number , clientY : number) // Pencil
   {
     
     if( this.status['status'] == 0)
@@ -236,7 +224,6 @@ export class PaintService {
       }
     }
 
-
     //Semi-Circle - up
     else if (this.attributes['shape'] == 'semicircleUp')
     { 
@@ -316,7 +303,7 @@ export class PaintService {
     this.ctx.stroke();
   }
 
-  clear()
+  clear() // Clear(clean out) whole canvas
   {
     this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
   }
@@ -326,19 +313,17 @@ export class PaintService {
     this.Attributes('white' , 5 ,  'freehand');
   }
 
-  delete()
+  delete() // Ask for confirmation then delete the project.
   { 
     if (confirm('Are You Sure?')) 
     {
-      //console.log('deleted')
       this.db.database.ref('projects').child(this.projectKey).remove();
       this.router.navigate(['/profile'])
     } 
   }
 
-  takeSnapshot(image_name : string)
+  takeSnapshot(image_name : string) // Take Snapshot of canvas and save it by image_name's name
   {   
-      console.log("Got the image name"+image_name)
       var image = this.canvas.toDataURL()
       this.base.child(`snapshot`).push({
         image : image ,
@@ -346,7 +331,7 @@ export class PaintService {
       });
   }
 
-  restore(imageUrl)
+  restore(imageUrl) // imageUrl is url format of the image.restore it and put it into canvas
   {    
         this.getBase64ImageFromURL(imageUrl).subscribe(base64data => {
           this.base64Image = 'data:image/jpg;base64,' + base64data;
@@ -381,32 +366,30 @@ export class PaintService {
       return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
   }
 
-  selectedShape(shape)
+  selectedShape(shape) // Set the selected shape 
   {
     this.shape = shape;
     this.Attributes(this.color , this.size , this.shape);
-    console.log(this.attributes)
   }
 
-  selectedColor(color)
+  selectedColor(color) // Set the selected color
   {
     this.color = color;
     this.Attributes(this.color , this.size , this.shape);
   }
 
-  selectedSize(keycode: number)
-  {    
+  selectedSize(keycode: number) // Set the selected size +(increase) -(decrease)
+  { 
+    console.log(keycode)
     switch(keycode)
     {  
-
-      case 43  :    if ( this.size < 20 )
+      case 43  :    if ( this.size < 20 ) // 43 --> + key
                         this.size += 2;
                      break;
 
-      case 45  :    if ( this.size > 5 )
+      case 45  :    if ( this.size > 5 ) // 45 --> - key
                         this.size -= 2;
                       break;
-
     }
     this.Attributes(this.color , this.size , this.shape);
   }

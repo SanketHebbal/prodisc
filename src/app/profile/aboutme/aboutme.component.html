@@ -42,13 +42,13 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-first-name">First name</label>
-                    <input disabled type="text" name="firstname" [ngModel]="firstname" id="input-first-name" class="form-control form-control-alternative" placeholder="First name" value="Lucky">
+                    <input disabled = "{{ edit }}" type="text" name="firstname" [(ngModel)]="firstname" id="input-first-name" class="form-control form-control-alternative" placeholder="First name" value="Lucky">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-last-name">Last name</label>
-                    <input disabled type="text" name="lastname" [ngModel]="lastname" id="input-last-name" class="form-control form-control-alternative" placeholder="Last name" value="Jesse">
+                    <input disabled = "{{ edit }}" type="text" name="lastname" [(ngModel)]="lastname" id="input-last-name" class="form-control form-control-alternative" placeholder="Last name" value="Jesse">
                   </div>
                 </div>
               </div>

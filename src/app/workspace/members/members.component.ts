@@ -48,7 +48,7 @@ export class MembersComponent implements OnInit {
   }
 
   SearchMembers(frm) {
-
+    this.Reset()
     let keys = frm.value.skills;
     let  user = []
     this.db.list("Users").snapshotChanges().
@@ -60,48 +60,43 @@ export class MembersComponent implements OnInit {
               ...item.payload.val()
             };
         });
-        // logic
+        // logic --- element is a individual user
         user.forEach(element => {
             for(var i = 0 ; i < keys.length; i++)
             { 
-              if(!element["skills"].includes(keys[i]))
+              if(!element["skills"].includes(keys[i])) // checking users skills with required skills
                 break
             }            
-            if(i == keys.length)
+            if(i == keys.length) // user has all required skill set
             { 
               for(var j = 0 ; j < this.memberList.length ; j++)
               {
-                if ( this.memberList[j]['id'] == element['$key'])
-                { 
-                  break
-                }   
+                if ( this.memberList[j]['id'] == element['$key']) // Checking user is in Team Member's list
+                  break 
               }
-              if (j == this.memberList.length) // not a member of team
+              if (j == this.memberList.length) // User is not in Team Member 
               { 
-                console.log("Checking his request list")
+                // Check that User has already been requested by this project or not
+
                 this.db.database.ref(`Users/${element['$key']}`).child('requests').once('value' , snap => 
                 {
                   if ( snap.val() == null)
                   { 
-                    console.log("List is empty so ready to add")
+                    // User has no requests from any project. He is selected. 
                     this.selectedMembers.push(element)
                   }
                   else
                   {
                     let requests =  [];
-                    requests = snap.val()
+                    requests = snap.val() // Fetch all his requests
                     for(var k = 0 ; k < requests.length ; k++)
                     {
-                      if ( requests[k]['projectId'] == this.projectKey)
+                      if ( requests[k]['projectId'] == this.projectKey) // Check that he is already been requested
                         break;
                     }
-                    if ( k == requests.length )
+                    if ( k == requests.length ) // User has not been requested by this project. He is selected
                     {
                       this.selectedMembers.push(element)
-                    }
-                    else
-                    {
-                      console.log("Request is already sent")
                     }
                   }
                 })
@@ -134,7 +129,7 @@ export class MembersComponent implements OnInit {
     this.Reset()
   }
 
-  Details(key)
+  Details(key) // Details of individual team member
   {
     this.db.database.ref(`Users/${key}`).on('value' , snap => {
       this.memberInfo = snap.val();
@@ -146,7 +141,7 @@ export class MembersComponent implements OnInit {
 
   Reset()
   {
-    this.selectedMembers = []
+    this.selectedMembers.splice(0)
   }
 }
  

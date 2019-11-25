@@ -97,7 +97,7 @@
                         </div>
                         <input type="text" formControlName="firstName" class="form-control" placeholder="First Name" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
                         <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                            <div *ngIf="f.firstName.errors.required">Firstname is required</div>
+                            <div *ngIf="f.firstName.errors.required">First Name is required</div>
                         </div>
                       </div>
                   </div>
@@ -109,7 +109,7 @@
                         </div>
                         <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
                         <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                            <div *ngIf="f.lastName.errors.required">Lastname is required</div>
+                            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
                         </div>
                       </div>
                   </div>
@@ -117,7 +117,7 @@
                   <div class="form-group">
                       <div class="input-group input-group-alternative mb-3">
                         <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                          <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                         </div>
                         <input type="text" formControlName="email" class="form-control" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
                         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
@@ -130,7 +130,7 @@
                   <div class="form-group">
                       <div class="input-group input-group-alternative mb-3">
                         <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                          <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                         </div>
                         <input type="password" formControlName="password" class="form-control" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
                         <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
@@ -143,33 +143,15 @@
                   <div class="form-group">
                       <div class="input-group input-group-alternative mb-3">
                         <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                          <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                         </div>
                         <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }">
                         <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
                             <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
-                            <div *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</div>
+                            <div *ngIf="f.confirmPassword.errors.mustMatch">Passwords didn't match</div>
                         </div>
                       </div>
                   </div>
-
-                <!-- <div class="form-group">
-                    <div class="input-group input-group-alternative">
-                        <select multiple formControlName="skills" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.skills.errors }">
-                            Your Skills
-                            <option value="C">C</option>
-                            <option value="C++"  >C++</option>
-                            <option  value="Java" >Java</option>
-                            <option  value="Python" >Python</option>
-                            <option  value="Data structure" >Data structure</option>
-                            <option  value="Php" >Php</option>
-                            <option  value="C#" >C#</option>
-                            <option  value="Angular">Angular</option>
-                            <option  value="Swift" >Swift</option>
-                            <option  value="Andriod" >Andriod</option>
-                        </select>                   
-                    </div>
-                </div> -->
 
                 <div class="form-group">
                     <div class="input-group input-group-alternative">
@@ -195,12 +177,7 @@
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary mt-4">Create account</button>
                 </div>
-
-                <!-- <div class="text-center" *ngIf="showSuccessMessage">
-                    <div class="alert alert-danger">
-                      {{ authError?.message }}
-                  </div>
-                </div> -->
+                
               </form>
             </div>
           </div>
